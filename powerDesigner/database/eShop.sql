@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     27/12/2019 18:30:59                          */
+/* Created on:     27/12/2019 19:23:22                          */
 /*==============================================================*/
 
 
@@ -25,7 +25,7 @@ drop table if exists User;
 /*==============================================================*/
 create table Buyer
 (
-   buyer_id             int not null,
+   buyer_id             int not null auto_increment,
    user_id              int,
    adress               text not null,
    phone_number         text not null,
@@ -37,7 +37,7 @@ create table Buyer
 /*==============================================================*/
 create table Cart_item
 (
-   cartitem_id          int not null,
+   cartitem_id          int not null auto_increment,
    order_id             int,
    Product_id           int,
    quantity             int not null,
@@ -49,7 +49,7 @@ create table Cart_item
 /*==============================================================*/
 create table Orders
 (
-   order_id             int not null,
+   order_id             int not null auto_increment,
    buyer_id             int,
    status_id            int,
    total                decimal(10,2) not null,
@@ -62,8 +62,8 @@ create table Orders
 /*==============================================================*/
 create table Product
 (
-   Product_id           int not null,
-   stock_id             char(10),
+   Product_id           int not null auto_increment,
+   stock_id             int,
    name                 text not null,
    price                decimal(10,2) not null,
    description          text not null,
@@ -80,7 +80,7 @@ create table Product
 /*==============================================================*/
 create table Role
 (
-   role_id              int not null,
+   role_id              int not null auto_increment,
    name                 text not null,
    primary key (role_id)
 );
@@ -90,7 +90,7 @@ create table Role
 /*==============================================================*/
 create table Status
 (
-   status_id            int not null,
+   status_id            int not null auto_increment,
    name                 text not null,
    primary key (status_id)
 );
@@ -100,7 +100,7 @@ create table Status
 /*==============================================================*/
 create table Stock
 (
-   stock_id             char(10) not null,
+   stock_id             int not null auto_increment,
    quantity             int not null,
    primary key (stock_id)
 );
@@ -110,7 +110,7 @@ create table Stock
 /*==============================================================*/
 create table User
 (
-   user_id              int not null,
+   user_id              int not null auto_increment,
    role_id              int,
    firstname            text not null,
    lastname             text not null,
