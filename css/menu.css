@@ -1,0 +1,24 @@
+#logo{
+	width:50px;
+}
+
+.card-img-top{
+	height: 170px;
+}
+
+#product_list{
+	margin: 2%;
+}
+
+#product_list > .col-lg-2.card{
+	margin: 15px;
+}
+.btn.btn-primary.btn-add-to-cart{
+	right: 20px;
+    position: absolute;
+}
+
+/*** REGISTER ***/
+.form-control{
+	height: 30px!important;
+}

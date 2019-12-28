@@ -1,5 +1,5 @@
 <?php 
-
+      session_start();
 	$submmited_email='';
 	if(ISSET($_POST['email']) && ISSET($_POST['password'])){
 
@@ -9,7 +9,7 @@
 			$user = $_POST['email'];
 			$pass = $_POST['password'];
             $sql_query = $conn->prepare("SELECT user.user_id,user.email,user.password,user.salt,role.name FROM user 
-            	JOIN role ON role.role_id=user.role_id WHERE email = :email ");
+            	JOIN role ON role.role_id=user.role_id WHERE email = :email AND active=1");
             $sql_query->bindParam(":email",$user);
             try{
             	$result= $sql_query->execute();
@@ -46,7 +46,7 @@
             		header('Location:seller/home.php');
             	}
             	else{
-            		header('Location:index.php');
+            		header('Location:login.php');
             	}
             }
             else{
@@ -64,20 +64,31 @@
 
 <html> 
 	<head>
-		<title>
-			Shoes eshop
-		</title>
-		<meta charset="UTF-8"> 
-		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-		<link href="css/index.css" rel="stylesheet">
-		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-		<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta charset="utf-8">
+            <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+
+            <!-- Website CSS style -->
+            <link rel="stylesheet" type="text/css" href="assets/css/main.css">
+
+            <!-- Website Font style -->
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+            
+            <!-- Google Fonts -->
+            <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+            <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+             <link rel="stylesheet" href="css/menu.css">
+             <title> Gigatron </title>
 	</head>
 	<body>
-		<div id="fullscreen_bg" class="fullscreen_bg"/>
+            <?php include 'anonimousnavigation.php'; ?>
 
 		<div class="container">
 
+                  
 			<form class="form-signin" action="" method="POST">
 				<h1 class="form-signin-heading text-muted">Sign In</h1>
 				<input type="text" class="form-control" placeholder="Email address" required="" autofocus="" name="email" value="<?php echo $submmited_email;?>">
@@ -90,7 +101,9 @@
 			<a href="register.php"><div style="text-align: right;">Need account?</div> </a>
 
 		</div>
-
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	</body>
 
 </html>
