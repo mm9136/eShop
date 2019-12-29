@@ -1,7 +1,7 @@
 <?php 
 
 session_start();
-if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "ADMIN" ){
+if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "SELLER" ){
 	header("Location:../login.php");
 	
 }else{
@@ -23,7 +23,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 	    }
     	
     }
-	$sql_query=$conn->prepare("SELECT * FROM user WHERE role_id=3");
+	$sql_query=$conn->prepare("SELECT * FROM user JOIN buyer ON user.user_id=buyer.user_id WHERE role_id=2");
 	try{
         $result= $sql_query->execute();
      }
@@ -53,9 +53,9 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		
+
 		<link rel="stylesheet" href="../css/menu.css">
-		<title>Admin</title>
+		<title>Seller</title>
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -65,22 +65,25 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		  </button>
 		  <div class="collapse navbar-collapse" id="navbarNavDropdown">
 		    <ul class="navbar-nav">
-		      <li class="nav-item active">
+		      <li class="nav-item ">
 		        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
 		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="sellermanagement.php">Seller management</a>
+		      <li class="nav-item active">
+		        <a class="nav-link" href="buyermanagement.php">Buyer management</a>
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>
 		      </li>
-		      <li class="nav-item active">
+		      <li class="nav-item">
+		        <a class="nav-link" href="productmanagement.php">Product administration</a>
+		      </li>
+		      <li class="nav-item ">
 		        <a class="nav-link" href="../logout.php">Log out</a>
 		      </li>
 		    </ul>
 		  </div>
 		</nav>
-		<div id="sellers-table" >
+		<div id="buyers-table" >
 			<table class="table table-striped" >
 				<thead class="thead-dark">
 					<tr>
@@ -88,6 +91,8 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 						<th>Firstname</th>
 						<th>Lastname</th>
 						<th>Email</th>
+						<th>Address</th>
+						<th>Phone number</th>
 						<th>Active</th>
 						<th></th>
 					</tr>
@@ -99,6 +104,8 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 				            <td><?php echo htmlentities($row['firstname'], ENT_QUOTES, 'UTF-8'); ?></td>
 				            <td><?php echo htmlentities($row['lastname'], ENT_QUOTES, 'UTF-8'); ?></td>
 				            <td><?php echo htmlentities($row['email'], ENT_QUOTES, 'UTF-8'); ?></td>
+				            <td><?php echo htmlentities($row['adress'], ENT_QUOTES, 'UTF-8'); ?></td>
+				            <td><?php echo htmlentities($row['phone_number'], ENT_QUOTES, 'UTF-8'); ?></td>
 				            <td><?php echo htmlentities($row['active']==1 ? "Active":"Inactive", ENT_QUOTES, 'UTF-8'); ?></td>
 				            <td>
 				            	<form method='post' action='#' > 

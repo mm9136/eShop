@@ -1,14 +1,14 @@
 <?php 
 $success=0;
 session_start();
-if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "ADMIN" ){
+if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "SELLER" ){
 	header("Location:../login.php");
 	
 }else{
 	if(!empty($_POST)){
 		require ("../config_and_connection.php");
 		
-		$sql_query=$conn->prepare("UPDATE user SET firstname=:firstname, lastname=:lastname,password=:password,salt=:salt WHERE email=:email AND role_id=1");
+		$sql_query=$conn->prepare("UPDATE user SET firstname=:firstname, lastname=:lastname,password=:password,salt=:salt WHERE email=:email AND role_id=3");
 		$sql_query->bindParam(":firstname",$_POST['firstname']);
     	$sql_query->bindParam(":lastname",$_POST['lastname']);
     	$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
@@ -52,7 +52,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
          <link rel="stylesheet" href="../css/menu.css">
-		<title>Admin</title>
+		<title>Seller</title>
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -71,7 +71,10 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		      <li class="nav-item active">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>
 		      </li>
-		      <li class="nav-item active">
+		      <li class="nav-item">
+		        <a class="nav-link" href="productmanagement.php">Product administration</a>
+		      </li>
+		      <li class="nav-item ">
 		        <a class="nav-link" href="../logout.php">Log out</a>
 		      </li>
 		    </ul>

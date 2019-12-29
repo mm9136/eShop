@@ -1,14 +1,14 @@
 <?php 
 $success=0;
 session_start();
-if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "ADMIN" ){
+if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "BUYER" ){
 	header("Location:../login.php");
 	
 }else{
 	if(!empty($_POST)){
 		require ("../config_and_connection.php");
 		
-		$sql_query=$conn->prepare("UPDATE user SET firstname=:firstname, lastname=:lastname,password=:password,salt=:salt WHERE email=:email AND role_id=1");
+		$sql_query=$conn->prepare("UPDATE user SET firstname=:firstname, lastname=:lastname,password=:password,salt=:salt WHERE email=:email AND role_id=2");
 		$sql_query->bindParam(":firstname",$_POST['firstname']);
     	$sql_query->bindParam(":lastname",$_POST['lastname']);
     	$salt = dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
@@ -23,6 +23,11 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		
 	    try{
         	$result= $sql_query->execute();
+        	$sql_query=$conn->prepare("UPDATE buyer SET adress=:adress, phone_number=:phone_number WHERE buyer.user_id in (SELECT user.user_id from user where user.email=:email AND user.role_id=2)");
+			$sql_query->bindParam(":adress",$_POST['adress']);
+	    	$sql_query->bindParam(":phone_number",$_POST['phone_number']);
+	    	$sql_query->bindParam(":email",$_SESSION['email']);
+	    	$result= $sql_query->execute();
         	$success=1;
         }
          catch(PDOExeption $ex){
@@ -52,7 +57,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
          <link rel="stylesheet" href="../css/menu.css">
-		<title>Admin</title>
+		<title>Seller</title>
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -65,13 +70,10 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		      <li class="nav-item">
 		        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
 		      </li>
-		      <li class="nav-item">
-		        <a class="nav-link" href="sellermanagement.php">Seller management</a>
-		      </li>
 		      <li class="nav-item active">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>
 		      </li>
-		      <li class="nav-item active">
+		      <li class="nav-item ">
 		        <a class="nav-link" href="../logout.php">Log out</a>
 		      </li>
 		    </ul>
@@ -98,15 +100,21 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 							<input type="text" class="form-control" name="firstname" id="firstname"  placeholder="Enter your Firstname" required/>
 						</div>
 						
-						
-						<div class="input-group flex-nowrap">
+						<div id="address_block" class="input-group flex-nowrap">
 							<div class="input-group-prepand">
-								<span class="input-group-text"><i class="fas fa-user fa" aria-hidden="true"></i></span>
+								<span class="input-group-text"><i class="fas fa-map-marker fa" aria-hidden="true"></i></span>
 							</div>
-							<input type="text" class="form-control" name="lastname" id="lastname"  placeholder="Enter your Lastname" required/>
+							<input type="text" class="form-control" name="adress" id="adress"  placeholder="Enter your Adress"/>
 						</div>
 
-						
+						<div id="phone_number_block" class="input-group flex-nowrap">
+							<div class="input-group-prepand">
+								<span class="input-group-text"><i class="fas fa-phone fa " aria-hidden="true"></i></span>
+							</div>
+							<input type="text" class="form-control" name="phone_number" id="phone_number"  placeholder="Enter your Phonenumber"/>
+						</div>
+
+
 						<div class="input-group flex-nowrap">
 							<div class="input-group-prepand">
 								<span class="input-group-text"><i class="fas fa-at fa" aria-hidden="true"></i></span>

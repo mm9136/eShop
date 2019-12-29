@@ -1,3 +1,8 @@
+body{
+	background-color:#ccc;
+
+}
+
 #logo{
 	width:50px;
 }
@@ -6,6 +11,10 @@
 	height: 170px;
 }
 
+.card{
+    border-radius: 10px;
+    padding-top: 10px;
+}
 #product_list{
 	margin: 2%;
 }
@@ -19,6 +28,39 @@
 }
 
 /*** REGISTER ***/
-.form-control{
-	height: 30px!important;
+#register-form,#add-product-form{
+	margin: 20px;
+}
+#register-form > .input-group.flex-nowrap,#add-product-form >.input-group.flex-nowrap{
+	margin-top: 10px!important;
+}
+.input-group-text{
+	width: 40px!important;
+    height: 38px!important;
+
+}
+
+.login-button{
+	width: 20%;
+    float: right;
+    margin-top:10px;
+}
+#buyers-table,#sellers-table{
+	margin:20px;
+
+}
+#add-product-btn{
+	width: 20%;
+    margin: 20px;
+    float: right;
+}
+
+#login-btn-block{
+	float: right;
+	margin-top: 10px;
+}
+
+
+.btn-login{
+	width: 25%;
 }
