@@ -20,7 +20,7 @@
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
              <link rel="stylesheet" href="css/menu.css">
-
+             <!--<link rel="icon" type="image/png" href="http://localhost/eShop/index.php" <img src="../images/logo.png" alt ="Logo" id="logo"/>>-->
             <title>Gigatron</title>
       </head>
       <body>

@@ -89,7 +89,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <a class="navbar-brand" href="home.php">LOGO</a>
+		  <a class="navbar-brand" href="home.php"><img src="../images/logo.png" alt ="Logo" id="logo"/></a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
 		  </button>
@@ -126,7 +126,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 						
 						<div class="input-group flex-nowrap">
 							<div class="input-group-prepand">
-								<span class="input-group-text"><i class="fas fa-user fa" aria-hidden="true"></i></span>
+								<span class="input-group-text"><i class="fas fa-dollar fa" aria-hidden="true"></i></span>
 							</div>
 							<input type="text" class="form-control" name="price" id="price"  placeholder="Enter product price" required/>
 						</div>
@@ -134,7 +134,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 						
 						<div class="input-group flex-nowrap">
 							<div class="input-group-prepand">
-								<span class="input-group-text"><i class="fas fa-at fa" aria-hidden="true"></i></span>
+								<span class="input-group-text"><i class="fas fa-file fa" aria-hidden="true"></i></span>
 							</div>
 							<textarea class="form-control" name="description" id="description"  placeholder="Enter product description" required></textarea>
 						</div>
@@ -142,7 +142,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 					
 						<div class="input-group flex-nowrap">
 							<div class="input-group-prepand">
-								<span class="input-group-text"><i class="fas fa-key fa" aria-hidden="true"></i></span>
+								<span class="input-group-text"><i class="fas fa-list-ol fa" aria-hidden="true"></i></span>
 							</div>
 							<input type="text" class="form-control" name="quantity" id="quantity"  placeholder="Enter product quantity" required/>
 						</div>

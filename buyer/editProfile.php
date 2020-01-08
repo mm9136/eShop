@@ -61,7 +61,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <a class="navbar-brand" href="home.php">LOGO</a>
+		  <a class="navbar-brand" href="home.php"><img src="../images/logo.png" alt ="Logo" id="logo"/></a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
 		  </button>
@@ -69,6 +69,12 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		    <ul class="navbar-nav">
 		      <li class="nav-item">
 		        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
+		      </li>
+		      <li class="nav-item ">
+		        <a class="nav-link" href="cart.php">Cart</a>
+		      </li>
+		      <li class="nav-item ">
+		        <a class="nav-link" href="history.php">History</a>
 		      </li>
 		      <li class="nav-item active">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>
@@ -92,14 +98,21 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		?>
 		<div class="container">
 			<div class="main-login main-center">
-				<form id=register-form class="form-horizontal" method="post" action="#">
+				<form id="register-form" class="form-horizontal" method="post" action="#">
 						<div class="input-group flex-nowrap">
 							<div class="input-group-prepand">
 								<span class="input-group-text"><i class="fas fa-user fa" aria-hidden="true"></i></span>
 							</div>
 							<input type="text" class="form-control" name="firstname" id="firstname"  placeholder="Enter your Firstname" required/>
 						</div>
-						
+
+						<div class="input-group flex-nowrap">
+							<div class="input-group-prepand">
+								<span class="input-group-text"><i class="fas fa-user fa" aria-hidden="true"></i></span>
+							</div>
+							<input type="text" class="form-control" name="lastname" id="lastname"  placeholder="Enter your Lastname" required/>
+						</div>
+
 						<div id="address_block" class="input-group flex-nowrap">
 							<div class="input-group-prepand">
 								<span class="input-group-text"><i class="fas fa-map-marker fa" aria-hidden="true"></i></span>
