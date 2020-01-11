@@ -1,10 +1,12 @@
 
 <?php 
+/*
+
       if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')) {
           
       }else{
            header("Location:https://localhost/eShop/login.php");
-      }
+      }*/
       session_start();
 	$submmited_email='';
       $success = 0;

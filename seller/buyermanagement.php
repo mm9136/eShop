@@ -70,6 +70,9 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		      </li>
 		      <li class="nav-item active">
 		        <a class="nav-link" href="buyermanagement.php">Buyer management</a>
+		      </li> 
+		      <li class="nav-item ">
+		        <a class="nav-link" href="history.php">Orders management</a>
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>

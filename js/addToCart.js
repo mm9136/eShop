@@ -7,7 +7,7 @@ $(".add_to_cart").click(function(){
 		data: {product_id:$(this).data('id')},
 		success: function(d) {
 			if(d=="success")
-				window.location.reload();
+				window.location.reload(true);
 		},
 		error: function() {
 			
@@ -23,7 +23,7 @@ $(".delete_product").click(function(){
 		type: 'POST',
 		data: {product_id:$(this).data('id')},
 		success: function(d) {
-			window.location.reload();
+			window.location.reload(true);
 		},
 		error: function() {
 			
@@ -38,7 +38,7 @@ $(".qty").bind('keyup mouseup', function () {
 		type: 'POST',
 		data: {product_id:$(this).data('id'), previous:$(this).data('previousValue'),quantity:$(this).val()},
 		success: function(d) {
-			window.location.reload();
+			window.location.reload(true);
 		},
 		error: function() {
 			

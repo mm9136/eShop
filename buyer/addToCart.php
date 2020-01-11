@@ -21,7 +21,6 @@
 		        die("Query failed".$ex->detMessage());
 		    }
 			$row=$sql_query->fetch();
-
 			$sql_query=$conn->prepare("INSERT INTO ORDERS (buyer_id,status_id,total) VALUES (:buyer_id,5,0)");
 			$sql_query->bindParam(":buyer_id",$row['current_buyer']);
 			
@@ -49,16 +48,44 @@
 	    catch(PDOExeption $ex){
 	        die("Query failed".$ex->detMessage());
 	    }
-	    $sql_query=$conn->prepare("INSERT INTO cart_item (order_id,product_id,quantity) VALUES (:order_id,:product_id,1)");
+
+
+	    $sql_query=$conn->prepare("SELECT * FROM  cart_item  WHERE order_id=:order_id AND product_id=:product_id" );
 	    $sql_query->bindParam(":order_id",$_SESSION['current_order_id']);
 	    $sql_query->bindParam(":product_id",$_POST['product_id']);
 	    try{
-	    	$result= $sql_query->execute();
-	    	echo "success";
-	     }
-	    catch(PDOExeption $ex){
-	        die("Query failed".$ex->detMessage());
-	    }
+		    $result= $sql_query->execute();
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		    }
+		$row=$sql_query->fetch();
+		if(!$row){
+
+		    $sql_query=$conn->prepare("INSERT INTO cart_item (order_id,product_id,quantity) VALUES (:order_id,:product_id,1)");
+		    $sql_query->bindParam(":order_id",$_SESSION['current_order_id']);
+		    $sql_query->bindParam(":product_id",$_POST['product_id']);
+		    try{
+		    	$result= $sql_query->execute();
+		    	echo "success";
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		    }
+		}else{
+			$sql_query=$conn->prepare("UPDATE cart_item SET quantity = (SELECT quantity FROM cart_item WHERE order_id=:order_id AND product_id=:product_id) + 1 WHERE order_id=:order_idMain AND product_id=:product_idMain");
+		    $sql_query->bindParam(":order_id",$_SESSION['current_order_id']);
+		    $sql_query->bindParam(":product_id",$_POST['product_id']);
+		    $sql_query->bindParam(":order_idMain",$_SESSION['current_order_id']);
+		    $sql_query->bindParam(":product_idMain",$_POST['product_id']);
+		    try{
+		    	$result= $sql_query->execute();
+		    	echo "success";
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		     }
+		}
 
 	}
      

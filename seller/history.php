@@ -1,16 +1,95 @@
 <?php 
 
 session_start();
-if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "BUYER" ){
+if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !== "SELLER" ){
 	header("Location:../login.php");
 	
 }else{
 	require ("../config_and_connection.php");
 	
+    if(!empty($_POST)){
+    	if(!empty($_POST['order_accept_id'])){
+    		$sql_query=$conn->prepare("UPDATE orders SET status_id=1 WHERE order_id=:order_id");
+    		$sql_query->bindParam(":order_id",$_POST['order_accept_id']);
+    		try{
+		        $result= $sql_query->execute();
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		    }
+    	}
+    	else if(!empty($_POST['order_decline_id'])){
+    		$sql_query=$conn->prepare("UPDATE orders SET status_id=2 WHERE order_id=:order_id");
+    		$sql_query->bindParam(":order_id",$_POST['order_decline_id']);
+    		try{
+		        $result= $sql_query->execute();
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		    }
 
-	$sql_query=$conn->prepare("SELECT orders.*,status.name AS status_name FROM orders JOIN buyer ON orders.buyer_id=buyer.buyer_id JOIN user ON user.user_id=buyer.user_id JOIN status ON orders.status_id = status.status_id WHERE user.email=:email AND orders.status_id IN (1,3,4)");
-	$sql_query->bindParam(":email",$_SESSION['email']);
+    		$sql_query=$conn->prepare("SELECT * FROM cart_Item WHERE order_id=:order_id");
+    		$sql_query->bindParam(":order_id",$_POST['order_decline_id']);
+    		try{
+		        $result= $sql_query->execute();
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		    }
+		    $rows=$sql_query->fetchAll();
 
+		    foreach($rows as $row) {
+		    	$sql_query=$conn->prepare("UPDATE stockItem SET quantity=(SELECT quantity from stockItem where product_id=:product_id_main ) + :quantity WHERE product_id=:product_id");
+				$sql_query->bindParam(":product_id_main",$row['product_id']);
+				$sql_query->bindParam(":quantity",$row['quantity']);
+				$sql_query->bindParam(":product_id",$row['product_id']);
+				try{
+				    $result= $sql_query->execute();
+				 }
+				catch(PDOExeption $ex){
+				    die("Query failed".$ex->detMessage());
+				}
+		    }
+
+		     
+    	}
+    	else if(!empty($_POST['order_storne_id'])){
+    		$sql_query=$conn->prepare("UPDATE orders SET status_id=3 WHERE order_id=:order_id");
+    		$sql_query->bindParam(":order_id",$_POST['order_storne_id']);
+    		try{
+		        $result= $sql_query->execute();
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		    }
+		    $sql_query=$conn->prepare("SELECT * FROM cart_Item WHERE order_id=:order_id");
+    		$sql_query->bindParam(":order_id",$_POST['order_storne_id']);
+    		try{
+		        $result= $sql_query->execute();
+		     }
+		    catch(PDOExeption $ex){
+		        die("Query failed".$ex->detMessage());
+		    }
+		    $rows=$sql_query->fetchAll();
+
+		    foreach($rows as $row) {
+		    	$sql_query=$conn->prepare("UPDATE stockItem SET quantity=(SELECT quantity from stockItem where product_id=:product_id_main ) + :quantity WHERE product_id=:product_id");
+				$sql_query->bindParam(":product_id_main",$row['product_id']);
+				$sql_query->bindParam(":quantity",$row['quantity']);
+				$sql_query->bindParam(":product_id",$row['product_id']);
+				try{
+				    $result= $sql_query->execute();
+				 }
+				catch(PDOExeption $ex){
+				    die("Query failed".$ex->detMessage());
+				}
+		    }
+    	}
+
+    }
+
+    $sql_query=$conn->prepare("SELECT orders.*,status.name AS status_name,user.email AS user_email FROM orders JOIN buyer ON orders.buyer_id=buyer.buyer_id JOIN status ON orders.status_id = status.status_id JOIN user ON buyer.user_id=user.user_id ORDER BY order_id DESC");
+	
 	try{
         $result= $sql_query->execute();
      }
@@ -53,14 +132,17 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		      <li class="nav-item ">
 		        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
 		      </li>
-		      <li class="nav-item ">
-		        <a class="nav-link" href="cart.php">Cart</a>
+		      <li class="nav-item">
+		        <a class="nav-link" href="buyermanagement.php">Buyer management</a>
 		      </li>
 		      <li class="nav-item active">
-		        <a class="nav-link" href="history.php">History</a>
+		        <a class="nav-link" href="history.php">Orders management</a>
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" href="productmanagement.php">Product administration</a>
 		      </li>
 		      <li class="nav-item ">
 		        <a class="nav-link" href="../logout.php">Log out</a>
@@ -73,7 +155,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		   <div class="card shopping-cart">
 		            <div class="card-header bg-dark text-light">
 		                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-		                 History
+		                 Orders management
 		                <div class="clearfix"></div>
 		            </div>
 		            <div class="card-body">
@@ -82,14 +164,15 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 			                        <div class="col-2 col-sm-2 col-md-2 text-center">
 			                               <h4 class="product-name"><strong>Order no. <?php echo htmlentities($row['order_id'], ENT_QUOTES, 'UTF-8'); ?></strong></h4>
 			                        </div>
-			                        <div class="col-8 text-sm-center col-sm-8 text-md-left col-md-8">
+			                        <div class="col-6 text-sm-center col-sm-6 text-md-left col-md-6">
 			                            <h4 class="product-name"><strong><?php echo htmlentities($row['date'], ENT_QUOTES, 'UTF-8'); ?></strong></h4>
+			                            <h4 ><strong>Buyer:<?php echo htmlentities($row['user_email'], ENT_QUOTES, 'UTF-8'); ?></strong></h4>
 
 
 			                            	 <?php 
 
-												$sql_query=$conn->prepare("SELECT product.name,product.product_id,product.price,product.description,SUM(cart_Item.quantity) AS quantity , (stockItem.quantity + SUM(cart_Item.quantity)) AS stock_quantity FROM cart_Item JOIN orders ON orders.order_id=cart_Item.order_id JOIN buyer ON buyer.buyer_id = orders.buyer_id JOIN user ON  user.user_id=buyer.user_id JOIN product ON product.product_id=cart_Item.product_id JOIN stockItem ON product.product_id=stockItem.product_id  WHERE orders.order_id=:order_id AND user.email=:email  GROUP BY product.product_id");
-												$sql_query->bindParam(":email",$_SESSION['email']);
+												$sql_query=$conn->prepare("SELECT product.name,product.product_id,product.price,product.description,SUM(cart_Item.quantity) AS quantity , (stockItem.quantity + SUM(cart_Item.quantity)) AS stock_quantity FROM cart_Item JOIN orders ON orders.order_id=cart_Item.order_id JOIN buyer ON buyer.buyer_id = orders.buyer_id JOIN user ON  user.user_id=buyer.user_id JOIN product ON product.product_id=cart_Item.product_id JOIN stockItem ON product.product_id=stockItem.product_id  WHERE orders.order_id=:order_id   GROUP BY product.product_id");
+								
 
 												$sql_query->bindParam(":order_id",$row['order_id']);
 												try{
@@ -101,6 +184,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 											    $rProducts=$sql_query->fetchAll();
 
 			                            	 foreach($rProducts as $rProduct): ?>
+
 							                    <div class="row">
 							                       
 							                        <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
@@ -122,7 +206,6 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 							                           
 							                        </div>
 							                    </div>
-							                    <hr>
 
 								   			 <?php endforeach; ?>
 
@@ -135,7 +218,23 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 							            <h5><strong><?php echo htmlentities($row['status_name'], ENT_QUOTES, 'UTF-8'); ?><span class="text-muted"></span></strong></h5>
 			                            
 			                        </div>
+			                        <div class="col-2 text-sm-center col-sm-2 text-md-left col-md-2">
+			                            <?php
+			                            	if($row["status_id"]==4){
+			                            		echo "<form method='post' action='#' > <input type='hidden' name='order_accept_id' value='".$row['order_id']."'></input><button type='submit' class='btn btn-primary btn-xs btn-block'>Accept</button></form>";
+			                            		echo "<form method='post' action='#' > <input type='hidden' name='order_decline_id' value='".$row['order_id']."'></input><button type='submit' class='btn btn-primary btn-xs btn-block'>Decline</button></form>";
+			                            	}
+			                            	else if($row["status_id"]==1){
+			                            		
+			                            		echo "<form method='post' action='#' > <input type='hidden' name='order_storne_id' value='".$row['order_id']."'></input><button type='submit' class='btn btn-danger btn-xs btn-block'>Storne</button></form>";
+			                            	}
+
+			                            ?>
+			                            
+			                        </div>
+
  								</div>
+ 							<hr>
 		            	 <?php endforeach; ?>
 		                   
 		               
