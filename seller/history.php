@@ -28,7 +28,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		        die("Query failed".$ex->detMessage());
 		    }
 
-    		$sql_query=$conn->prepare("SELECT * FROM cart_Item WHERE order_id=:order_id");
+    		$sql_query=$conn->prepare("SELECT * FROM cart_item WHERE order_id=:order_id");
     		$sql_query->bindParam(":order_id",$_POST['order_decline_id']);
     		try{
 		        $result= $sql_query->execute();
@@ -39,7 +39,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		    $rows=$sql_query->fetchAll();
 
 		    foreach($rows as $row) {
-		    	$sql_query=$conn->prepare("UPDATE stockItem SET quantity=(SELECT quantity from stockItem where product_id=:product_id_main ) + :quantity WHERE product_id=:product_id");
+		    	$sql_query=$conn->prepare("UPDATE stockitem SET quantity=(SELECT quantity from stockitem where product_id=:product_id_main ) + :quantity WHERE product_id=:product_id");
 				$sql_query->bindParam(":product_id_main",$row['product_id']);
 				$sql_query->bindParam(":quantity",$row['quantity']);
 				$sql_query->bindParam(":product_id",$row['product_id']);
@@ -62,7 +62,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		    catch(PDOExeption $ex){
 		        die("Query failed".$ex->detMessage());
 		    }
-		    $sql_query=$conn->prepare("SELECT * FROM cart_Item WHERE order_id=:order_id");
+		    $sql_query=$conn->prepare("SELECT * FROM cart_item WHERE order_id=:order_id");
     		$sql_query->bindParam(":order_id",$_POST['order_storne_id']);
     		try{
 		        $result= $sql_query->execute();
@@ -73,7 +73,8 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		    $rows=$sql_query->fetchAll();
 
 		    foreach($rows as $row) {
-		    	$sql_query=$conn->prepare("UPDATE stockItem SET quantity=(SELECT quantity from stockItem where product_id=:product_id_main ) + :quantity WHERE product_id=:product_id");
+		    	$sql_query=$conn->prepare("UPDATE stockitem SET quantity=(SELECT quantity from stockitem where product_id=:product_id_main ) + :quantity "
+                                . "WHERE product_id=:product_id");
 				$sql_query->bindParam(":product_id_main",$row['product_id']);
 				$sql_query->bindParam(":quantity",$row['quantity']);
 				$sql_query->bindParam(":product_id",$row['product_id']);
@@ -88,7 +89,11 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 
     }
 
-    $sql_query=$conn->prepare("SELECT orders.*,status.name AS status_name,user.email AS user_email FROM orders JOIN buyer ON orders.buyer_id=buyer.buyer_id JOIN status ON orders.status_id = status.status_id JOIN user ON buyer.user_id=user.user_id ORDER BY order_id DESC");
+    $sql_query=$conn->prepare("SELECT orders.*,status.name AS status_name,user.email AS user_email FROM orders"
+            . " JOIN buyer ON orders.buyer_id=buyer.buyer_id "
+            . "JOIN status ON orders.status_id = status.status_id "
+            . "JOIN user ON buyer.user_id=user.user_id "
+            . "ORDER BY order_id DESC");
 	
 	try{
         $result= $sql_query->execute();
@@ -119,7 +124,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="stylesheet" href="../css/menu.css">
-		<title>Buyer</title>
+		<title>Seller</title>
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -171,7 +176,10 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 
 			                            	 <?php 
 
-												$sql_query=$conn->prepare("SELECT product.name,product.product_id,product.price,product.description,SUM(cart_Item.quantity) AS quantity , (stockItem.quantity + SUM(cart_Item.quantity)) AS stock_quantity FROM cart_Item JOIN orders ON orders.order_id=cart_Item.order_id JOIN buyer ON buyer.buyer_id = orders.buyer_id JOIN user ON  user.user_id=buyer.user_id JOIN product ON product.product_id=cart_Item.product_id JOIN stockItem ON product.product_id=stockItem.product_id  WHERE orders.order_id=:order_id   GROUP BY product.product_id");
+												$sql_query=$conn->prepare("SELECT product.name,product.product_id,product.price,product.description,SUM(cart_item.quantity) AS quantity , "
+                                                                                                        . "(stockitem.quantity + SUM(cart_item.quantity)) AS stock_quantity FROM cart_item JOIN orders ON orders.order_id=cart_item.order_id "
+                                                                                                        . "JOIN buyer ON buyer.buyer_id = orders.buyer_id JOIN user ON  user.user_id=buyer.user_id JOIN product ON product.product_id=cart_item.product_id "
+                                                                                                        . "JOIN stockitem ON product.product_id=stockitem.product_id  WHERE orders.order_id=:order_id   GROUP BY product.name,product.product_id,product.price,product.description,stockitem.quantity");
 								
 
 												$sql_query->bindParam(":order_id",$row['order_id']);

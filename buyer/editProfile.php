@@ -23,7 +23,8 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		
 	    try{
         	$result= $sql_query->execute();
-        	$sql_query=$conn->prepare("UPDATE buyer SET adress=:adress, phone_number=:phone_number WHERE buyer.user_id in (SELECT user.user_id from user where user.email=:email AND user.role_id=2)");
+        	$sql_query=$conn->prepare("UPDATE buyer SET adress=:adress, phone_number=:phone_number WHERE buyer.user_id in"
+                        . " (SELECT user.user_id from user where user.email=:email AND user.role_id=2)");
 			$sql_query->bindParam(":adress",$_POST['adress']);
 	    	$sql_query->bindParam(":phone_number",$_POST['phone_number']);
 	    	$sql_query->bindParam(":email",$_SESSION['email']);

@@ -23,7 +23,9 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
     	
     }
 
-	$sql_query=$conn->prepare("SELECT product.*, stockitem.*, stock.name as stock_name FROM product JOIN stockitem ON product.product_id=stockitem.product_id JOIN stock ON stockitem.stock_id=stock.stock_id");
+	$sql_query=$conn->prepare("SELECT product.*, stockitem.*, stock.name as stock_name FROM product"
+                . " JOIN stockitem ON product.product_id=stockitem.product_id "
+                . "JOIN stock ON stockitem.stock_id=stock.stock_id");
 	try{
         $result= $sql_query->execute();
      }

@@ -15,7 +15,7 @@
  <div class="row" id="product_list">
     <?php foreach($rows as $row): ?>
           <div class="col-lg-2 card" style="width: 18rem;">
-            <img src="http://localhost/eShop/images/<?php echo htmlentities($row['product_id'], ENT_QUOTES, 'UTF-8'); ?>/img0.png" class="card-img-top" alt="<?php echo htmlentities($row['name'], ENT_QUOTES, 'UTF-8'); ?> image">
+            <img src="http://localhost/netbeans/eShop/images/<?php echo htmlentities($row['product_id'], ENT_QUOTES, 'UTF-8'); ?>/img0.png" class="card-img-top" alt="<?php echo htmlentities($row['name'], ENT_QUOTES, 'UTF-8'); ?> image">
             <div class="card-body">
                 <h5 class="card-title"><?php echo htmlentities($row['name'], ENT_QUOTES, 'UTF-8'); ?></h5>
                 <p class="card-text"><?php echo htmlentities($row['description'], ENT_QUOTES, 'UTF-8'); ?></p>

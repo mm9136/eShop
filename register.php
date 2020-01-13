@@ -52,7 +52,7 @@
 	        if($row){
 	        	$success=1;  	
 	        }else{
-	        	$sql_query=$conn->prepare("INSERT INTO USER (email,password,salt,firstname,lastname,active,role_id) VALUES (:email,:password,:salt,:firstname,:lastname,0, 2)");
+	        	$sql_query=$conn->prepare("INSERT INTO user(email,password,salt,firstname,lastname,active,role_id) VALUES (:email,:password,:salt,:firstname,:lastname,0, 2)");
 	        	$sql_query->bindParam(":email",$_POST['email']);
 	        	$sql_query->bindParam(":firstname",$_POST['firstname']);
 	        	$sql_query->bindParam(":lastname",$_POST['lastname']);
@@ -71,7 +71,7 @@
 					$sql_query->bindParam(":email",$_POST['email']);
 	            	$result= $sql_query->execute();
 	            	$row=$sql_query->fetch();
-		        	$sql_query=$conn->prepare("INSERT INTO BUYER (adress,phone_number,user_id) VALUES (:adress,:phone_number,:user_id)");
+		        	$sql_query=$conn->prepare("INSERT INTO buyer (adress,phone_number,user_id) VALUES (:adress,:phone_number,:user_id)");
 		        	$sql_query->bindParam(":adress",$_POST['adress']);
 		        	$sql_query->bindParam(":phone_number",$_POST['phone_number']);
 			    	$sql_query->bindParam(":user_id",$row['user_id']);

@@ -5,11 +5,8 @@
     </head>
     <body>
         <?php
-        
-        
-        $authorized_users = [$_SESSION["user"]["email"]];
-        
-
+        session_start();
+        $authorized_users=[$_SESSION['email']];
         $client_cert = filter_input(INPUT_SERVER, "SSL_CLIENT_CERT");
 
         if ($client_cert == null) {
@@ -21,13 +18,18 @@
         $username = $cert_data['subject']['CN'];
         $commonname = (is_array($cert_data['subject']['emailAddress']) ?
                         $cert_data['subject']['emailAddress'][0] : $cert_data['subject']['emailAddress']);
+               // var_dump($commonname);
         if (in_array($commonname, $authorized_users)) {
-            
-            ViewHelper::redirect(BASE_URL . "store");
+            if($_SESSION['role']=='ADMIN'){
+                header('Location:../admin/home.php');
+            }else if($_SESSION['role']=='SELLER'){
+                header('Location:../seller/home.php');
+                
+            }
             
         } else {
             $_SESSION["user"] = NULL;
-            ViewHelper::redirect(BASE_URL . "login");
+           header('Location:../login.php');
         }
 
 

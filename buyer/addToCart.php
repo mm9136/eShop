@@ -2,7 +2,10 @@
      require ("../config_and_connection.php");
 
 	session_start();
-		$sql_query=$conn->prepare("SELECT orders.order_id AS current_order FROM orders JOIN buyer ON buyer.buyer_id=orders.buyer_id JOIN user ON buyer.user_id=user.user_id  JOIN status ON status.status_id=orders.status_id WHERE user.email=:email AND status.status_id=5");
+		$sql_query=$conn->prepare("SELECT orders.order_id AS current_order FROM orders "
+                        . "JOIN buyer ON buyer.buyer_id=orders.buyer_id "
+                        . "JOIN user ON buyer.user_id=user.user_id  "
+                        . "JOIN status ON status.status_id=orders.status_id WHERE user.email=:email AND status.status_id=5");
 		$sql_query->bindParam(":email",$_SESSION['email']);
 		try{
 		    $result= $sql_query->execute();
@@ -21,7 +24,7 @@
 		        die("Query failed".$ex->detMessage());
 		    }
 			$row=$sql_query->fetch();
-			$sql_query=$conn->prepare("INSERT INTO ORDERS (buyer_id,status_id,total) VALUES (:buyer_id,5,0)");
+			$sql_query=$conn->prepare("INSERT INTO orders (buyer_id,status_id,total) VALUES (:buyer_id,5,0)");
 			$sql_query->bindParam(":buyer_id",$row['current_buyer']);
 			
 			try{
@@ -39,7 +42,7 @@
 
      
 	if(!empty($_POST)){
-		$sql_query=$conn->prepare("UPDATE stockItem SET quantity =(SELECT quantity FROM stockItem WHERE product_id=:product_id)-1 where product_id=:product_id_main");
+		$sql_query=$conn->prepare("UPDATE stockitem SET quantity =(SELECT quantity FROM stockitem WHERE product_id=:product_id)-1 where product_id=:product_id_main");
 		$sql_query->bindParam(":product_id",$_POST['product_id']);
 		$sql_query->bindParam(":product_id_main",$_POST['product_id']);
 		try{
@@ -73,11 +76,11 @@
 		        die("Query failed".$ex->detMessage());
 		    }
 		}else{
-			$sql_query=$conn->prepare("UPDATE cart_item SET quantity = (SELECT quantity FROM cart_item WHERE order_id=:order_id AND product_id=:product_id) + 1 WHERE order_id=:order_idMain AND product_id=:product_idMain");
+			$sql_query=$conn->prepare("UPDATE cart_item SET quantity = (SELECT quantity FROM cart_item WHERE order_id=:order_id AND product_id=:product_id) + 1 WHERE order_id=:order_idmain AND product_id=:product_idmain");
 		    $sql_query->bindParam(":order_id",$_SESSION['current_order_id']);
 		    $sql_query->bindParam(":product_id",$_POST['product_id']);
-		    $sql_query->bindParam(":order_idMain",$_SESSION['current_order_id']);
-		    $sql_query->bindParam(":product_idMain",$_POST['product_id']);
+		    $sql_query->bindParam(":order_idmain",$_SESSION['current_order_id']);
+		    $sql_query->bindParam(":product_idmain",$_POST['product_id']);
 		    try{
 		    	$result= $sql_query->execute();
 		    	echo "success";

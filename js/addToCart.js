@@ -2,7 +2,7 @@
 $(".add_to_cart").click(function(){
 
 	$.ajax({
-		url: 'http://localhost/eShop/buyer/addToCart.php',
+		url: 'http://localhost/netbeans/eShop/buyer/addToCart.php',
 		type: 'POST',
 		data: {product_id:$(this).data('id')},
 		success: function(d) {
@@ -19,7 +19,7 @@ $(".add_to_cart").click(function(){
 $(".delete_product").click(function(){
 
 	$.ajax({
-		url: 'http://localhost/eShop/buyer/deleteProduct.php',
+		url: 'http://localhost/netbeans/eShop/buyer/deleteProduct.php',
 		type: 'POST',
 		data: {product_id:$(this).data('id')},
 		success: function(d) {
@@ -34,7 +34,7 @@ $(".delete_product").click(function(){
 
 $(".qty").bind('keyup mouseup', function () {
     $.ajax({
-		url: 'http://localhost/eShop/buyer/changeQuantity.php',
+		url: 'http://localhost/netbeans/eShop/buyer/changeQuantity.php',
 		type: 'POST',
 		data: {product_id:$(this).data('id'), previous:$(this).data('previousValue'),quantity:$(this).val()},
 		success: function(d) {

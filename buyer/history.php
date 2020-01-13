@@ -8,7 +8,8 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 	require ("../config_and_connection.php");
 	
 
-	$sql_query=$conn->prepare("SELECT orders.*,status.name AS status_name FROM orders JOIN buyer ON orders.buyer_id=buyer.buyer_id JOIN user ON user.user_id=buyer.user_id JOIN status ON orders.status_id = status.status_id WHERE user.email=:email AND orders.status_id IN (1,3,4)");
+	$sql_query=$conn->prepare("SELECT orders.*,status.name AS status_name FROM orders JOIN buyer ON orders.buyer_id=buyer.buyer_id "
+                . "JOIN user ON user.user_id=buyer.user_id JOIN status ON orders.status_id = status.status_id WHERE user.email=:email AND orders.status_id IN (1,3,4)");
 	$sql_query->bindParam(":email",$_SESSION['email']);
 
 	try{
@@ -88,7 +89,12 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 
 			                            	 <?php 
 
-												$sql_query=$conn->prepare("SELECT product.name,product.product_id,product.price,product.description,SUM(cart_Item.quantity) AS quantity , (stockItem.quantity + SUM(cart_Item.quantity)) AS stock_quantity FROM cart_Item JOIN orders ON orders.order_id=cart_Item.order_id JOIN buyer ON buyer.buyer_id = orders.buyer_id JOIN user ON  user.user_id=buyer.user_id JOIN product ON product.product_id=cart_Item.product_id JOIN stockItem ON product.product_id=stockItem.product_id  WHERE orders.order_id=:order_id AND user.email=:email  GROUP BY product.product_id");
+												$sql_query=$conn->prepare("SELECT product.name,product.product_id,product.price,product.description,SUM(cart_item.quantity) AS quantity ,"
+                                                                                                        . " (stockitem.quantity + SUM(cart_item.quantity)) AS stock_quantity FROM cart_item "
+                                                                                                        . "JOIN orders ON orders.order_id=cart_item.order_id JOIN buyer ON buyer.buyer_id = orders.buyer_id "
+                                                                                                        . "JOIN user ON  user.user_id=buyer.user_id JOIN product ON product.product_id=cart_item.product_id "
+                                                                                                        . "JOIN stockitem ON product.product_id=stockitem.product_id  WHERE orders.order_id=:order_id AND user.email=:email  "
+                                                                                                        . "GROUP BY product.name,product.product_id,product.price,product.description,stockitem.quantity");
 												$sql_query->bindParam(":email",$_SESSION['email']);
 
 												$sql_query->bindParam(":order_id",$row['order_id']);

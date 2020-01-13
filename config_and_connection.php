@@ -1,8 +1,8 @@
 <?php
-	$database_name="eshop";
+	$database_name="eShop";
 	$server_name="localhost";
 	$user="root";
-	$password="";
+	$password="ep";
 	$options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
 	try{
 		$conn=new PDO("mysql:host=$server_name;dbname=$database_name",$user,$password,$options);

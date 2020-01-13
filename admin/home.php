@@ -46,7 +46,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		      <li class="nav-item">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>
 		      </li>
-		      <li class="nav-item active">
+		      <li class="nav-item ">
 		        <a class="nav-link" href="../logout.php">Log out</a>
 		      </li>
 		    </ul>

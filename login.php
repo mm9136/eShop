@@ -1,12 +1,13 @@
+<?php
 
-<?php 
-/*
+if(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == "off"){
+                $redirect = "https://localhost/netbeans/eShop/login.php";
 
-      if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off')) {
-          
-      }else{
-           header("Location:https://localhost/eShop/login.php");
-      }*/
+                header('Location: ' . $redirect);
+                exit();
+            }
+
+
       session_start();
 	$submmited_email='';
       $success = 0;
@@ -46,13 +47,13 @@
             	$_SESSION['email']=$row['email'];
             	$_SESSION['role']=$row['name'];
             	if($_SESSION['role']=='ADMIN'){
-            		header('Location:admin/home.php');
+            		header('Location:certifikat/cert.php');
             	}
             	else if($_SESSION['role']=='BUYER'){
             		header('Location:buyer/home.php');
             	}
             	else if($_SESSION['role']=='SELLER'){
-            		header('Location:seller/home.php');
+            		header('Location:certifikat/cert.php');
             	}
             	else{
             		header('Location:login.php');
@@ -89,7 +90,7 @@
             <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
             <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
 
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"  crossorigin="anonymous">
 
              <link rel="stylesheet" href="css/menu.css">
              <title> Gigatron </title>

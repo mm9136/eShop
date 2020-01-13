@@ -65,16 +65,16 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		  </button>
 		  <div class="collapse navbar-collapse" id="navbarNavDropdown">
 		    <ul class="navbar-nav">
-		      <li class="nav-item active">
+		      <li class="nav-item ">
 		        <a class="nav-link" href="home.php">Home <span class="sr-only">(current)</span></a>
 		      </li>
-		      <li class="nav-item">
+		      <li class="nav-item active">
 		        <a class="nav-link" href="sellermanagement.php">Seller management</a>
 		      </li>
 		      <li class="nav-item">
 		        <a class="nav-link" href="editProfile.php">Edit Profile</a>
 		      </li>
-		      <li class="nav-item active">
+		      <li class="nav-item ">
 		        <a class="nav-link" href="../logout.php">Log out</a>
 		      </li>
 		    </ul>
