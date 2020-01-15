@@ -16,7 +16,7 @@
 	        if($row){
 	        	$success=1;  	
 	        }else{
-	        	$sql_query=$conn->prepare("INSERT INTO USER (email,password,salt,firstname,lastname,active,role_id) VALUES (:email,:password,:salt,:firstname,:lastname,0, 3)");
+	        	$sql_query=$conn->prepare("INSERT INTO user (email,password,salt,firstname,lastname,active,role_id) VALUES (:email,:password,:salt,:firstname,:lastname,0, 3)");
 	        	$sql_query->bindParam(":email",$_POST['email']);
 	        	$sql_query->bindParam(":firstname",$_POST['firstname']);
 	        	$sql_query->bindParam(":lastname",$_POST['lastname']);

@@ -7,7 +7,11 @@
     <ul class="navbar-nav">
       <li class="nav-item">
         <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-      <ass="nav-item">
+      </li>
+      <li class="nav-item ">
+        <a class="nav-link" href="login.php">Login</a>
+      </li>
+      <li class="nav-item ">
         <a class="nav-link" href="register.php">Register</a>
       </li>
       

@@ -39,9 +39,18 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		    $rows=$sql_query->fetchAll();
 
 		    foreach($rows as $row) {
-		    	$sql_query=$conn->prepare("UPDATE stockitem SET quantity=(SELECT quantity from stockitem where product_id=:product_id_main ) + :quantity WHERE product_id=:product_id");
-				$sql_query->bindParam(":product_id_main",$row['product_id']);
-				$sql_query->bindParam(":quantity",$row['quantity']);
+                        $get_quantity=$conn->prepare("SELECT quantity FROM stockitem where product_id=:product_id_main");
+                        $get_quantity->bindParam(":product_id_main",$row['product_id']);
+                        try{
+                            $result= $get_quantity->execute();
+                         }
+                        catch(PDOExeption $ex){
+                            die("Query failed".$ex->detMessage());
+                        }
+                        $row1=$get_quantity->fetch();       
+		    	$sql_query=$conn->prepare("UPDATE stockitem SET quantity=:q WHERE product_id=:product_id");
+		    	$q=$row['quantity']+$row1['quantity'];
+				$sql_query->bindParam(":q",$q);
 				$sql_query->bindParam(":product_id",$row['product_id']);
 				try{
 				    $result= $sql_query->execute();
@@ -73,10 +82,21 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
 		    $rows=$sql_query->fetchAll();
 
 		    foreach($rows as $row) {
-		    	$sql_query=$conn->prepare("UPDATE stockitem SET quantity=(SELECT quantity from stockitem where product_id=:product_id_main ) + :quantity "
-                                . "WHERE product_id=:product_id");
-				$sql_query->bindParam(":product_id_main",$row['product_id']);
-				$sql_query->bindParam(":quantity",$row['quantity']);
+		    	$get_quantity=$conn->prepare("SELECT quantity from stockitem where product_id=:product_id_main");
+		    	$get_quantity->bindParam(":product_id_main",$row['product_id']);
+				try{
+				    $result= $get_quantity->execute();
+				 }
+				catch(PDOExeption $ex){
+				    die("Query failed".$ex->detMessage());
+				}
+				
+				$row1=$get_quantity->fetch();
+
+				
+				$sql_query=$conn->prepare("UPDATE stockitem SET quantity =:q WHERE product_id=:product_id");
+				$q=$row1['quantity'] + $row['quantity'];
+				$sql_query->bindParam("q",$q);
 				$sql_query->bindParam(":product_id",$row['product_id']);
 				try{
 				    $result= $sql_query->execute();
@@ -93,7 +113,7 @@ if(empty($_SESSION['email']) || empty($_SESSION['role']) || $_SESSION['role'] !=
             . " JOIN buyer ON orders.buyer_id=buyer.buyer_id "
             . "JOIN status ON orders.status_id = status.status_id "
             . "JOIN user ON buyer.user_id=user.user_id "
-            . "ORDER BY order_id DESC");
+            . "WHERE orders.status_id!= 5 ORDER BY order_id DESC");
 	
 	try{
         $result= $sql_query->execute();
